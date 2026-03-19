@@ -1,0 +1,194 @@
+[
+    {
+        "id": "36c7c629a10fb237",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a51614d75fc04c0c",
+        "type": "inject",
+        "z": "36c7c629a10fb237",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "40",
+        "payloadType": "num",
+        "x": 150,
+        "y": 220,
+        "wires": [
+            [
+                "fac581d04d277883"
+            ]
+        ]
+    },
+    {
+        "id": "fac581d04d277883",
+        "type": "influxdb out",
+        "z": "36c7c629a10fb237",
+        "influxdb": "f40c770c16759245",
+        "name": "",
+        "measurement": "Test",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "",
+        "retentionPolicyV18Flux": "",
+        "org": "Organization",
+        "bucket": "Esp32_Test",
+        "x": 510,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "cde5182ac98b67d3",
+        "type": "inject",
+        "z": "36c7c629a10fb237",
+        "name": "",
+        "props": [
+            {
+                "p": "query",
+                "v": "from(bucket: \"Esp32_Test\")   |> range(start: -1h, stop: 1h)   |> filter(fn: (r) => r[\"_measurement\"] == \"Test\")   |> filter(fn: (r) => r[\"_field\"] == \"value\")",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 400,
+        "wires": [
+            [
+                "8a95291199a381e5"
+            ]
+        ]
+    },
+    {
+        "id": "8a95291199a381e5",
+        "type": "influxdb in",
+        "z": "36c7c629a10fb237",
+        "influxdb": "f40c770c16759245",
+        "name": "",
+        "query": "",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "Organization",
+        "x": 350,
+        "y": 400,
+        "wires": [
+            [
+                "49518dfd214a2271"
+            ]
+        ]
+    },
+    {
+        "id": "49518dfd214a2271",
+        "type": "function",
+        "z": "36c7c629a10fb237",
+        "name": "Function",
+        "func": "let points = msg.payload.map(p => ({\n    x: new Date(p._time).getTime(),\n    y: p._value\n}));\n\nlet labels = points.map(p => new Date(p.x).toLocaleTimeString());\n\nmsg.payload = [{\n    series: [\"Test\"],\n    data: [points],\n    labels: labels\n}];\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 560,
+        "y": 400,
+        "wires": [
+            [
+                "2057dd8ac4716528"
+            ]
+        ]
+    },
+    {
+        "id": "2057dd8ac4716528",
+        "type": "ui_chart",
+        "z": "36c7c629a10fb237",
+        "name": "",
+        "group": "cce0863996605e75",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "chart",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 750,
+        "y": 400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f40c770c16759245",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "database",
+        "name": "",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "2.0",
+        "url": "http://localhost:8086",
+        "timeout": "10",
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "cce0863996605e75",
+        "type": "ui_group",
+        "name": "Sensor Dashboard",
+        "tab": "31b1c7f6583c2628",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false
+    },
+    {
+        "id": "31b1c7f6583c2628",
+        "type": "ui_tab",
+        "name": "ESP32 Dashboard",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]

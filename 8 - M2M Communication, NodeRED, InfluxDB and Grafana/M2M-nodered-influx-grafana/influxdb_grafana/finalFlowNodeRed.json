@@ -1,0 +1,565 @@
+[
+    {
+        "id": "3152ace35cd2bc1a",
+        "type": "tab",
+        "label": "mqtt",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "9e5b5db9e3163646",
+        "type": "mqtt in",
+        "z": "3152ace35cd2bc1a",
+        "name": "hum",
+        "topic": "hum",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "897b6eacd496e8ea",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 160,
+        "wires": [
+            [
+                "8d3cc7c2d6b8dfd7"
+            ]
+        ]
+    },
+    {
+        "id": "e7338c3aaa70a478",
+        "type": "mqtt in",
+        "z": "3152ace35cd2bc1a",
+        "name": "temp",
+        "topic": "temp",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "897b6eacd496e8ea",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 220,
+        "wires": [
+            [
+                "9eb9b07929ec3392"
+            ]
+        ]
+    },
+    {
+        "id": "9f63e23f68718dc9",
+        "type": "influxdb out",
+        "z": "3152ace35cd2bc1a",
+        "influxdb": "9caa5eb5bbf553be",
+        "name": "",
+        "measurement": "bedroom",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 880,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "101c3636526b75e7",
+        "type": "aedes broker",
+        "z": "3152ace35cd2bc1a",
+        "name": "",
+        "mqtt_port": 1883,
+        "mqtt_ws_bind": "port",
+        "mqtt_ws_port": "",
+        "mqtt_ws_path": "",
+        "cert": "",
+        "key": "",
+        "certname": "",
+        "keyname": "",
+        "dburl": "",
+        "usetls": false,
+        "x": 130,
+        "y": 80,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "d1c12558ca99b0d7",
+        "type": "inject",
+        "z": "3152ace35cd2bc1a",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 80,
+        "y": 560,
+        "wires": [
+            [
+                "8daa76d8f1b9ce4f"
+            ]
+        ]
+    },
+    {
+        "id": "5956d993949e91dd",
+        "type": "influxdb batch",
+        "z": "3152ace35cd2bc1a",
+        "influxdb": "9caa5eb5bbf553be",
+        "precision": "",
+        "retentionPolicy": "",
+        "name": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 630,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "8daa76d8f1b9ce4f",
+        "type": "function",
+        "z": "3152ace35cd2bc1a",
+        "name": "",
+        "func": "msg.payload = [{\n    measurement: \"weather_sensor\",\n    fields: {\n    numValue: 12,\n    rendomValue: Math.floor(Math.random()*10),\n    strValue: \"giannis\"\n},\ntags:{\n    location: \"garden\"\n},\ntimestamp: new Date()\n},\n{\n    measurement: \"alarm_sensor\",\n    fields: {\n        proximity: 999,\n        temp: 19.5\n    },\ntags:{\n    location: \"home\"\n},\ntimestamp: new Date()\n    \n}\n];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 560,
+        "wires": [
+            [
+                "5956d993949e91dd"
+            ]
+        ]
+    },
+    {
+        "id": "14575b4afd7cb766",
+        "type": "influxdb in",
+        "z": "3152ace35cd2bc1a",
+        "influxdb": "9caa5eb5bbf553be",
+        "name": "",
+        "query": "",
+        "rawOutput": false,
+        "precision": "",
+        "retentionPolicy": "",
+        "org": "organisation",
+        "x": 330,
+        "y": 800,
+        "wires": [
+            [
+                "a77bd57c15f641b5"
+            ]
+        ]
+    },
+    {
+        "id": "7501929a6634141e",
+        "type": "debug",
+        "z": "3152ace35cd2bc1a",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "c24a51ce0538c72c",
+        "type": "join",
+        "z": "3152ace35cd2bc1a",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 570,
+        "y": 180,
+        "wires": [
+            [
+                "9f63e23f68718dc9",
+                "7501929a6634141e"
+            ]
+        ]
+    },
+    {
+        "id": "8d3cc7c2d6b8dfd7",
+        "type": "change",
+        "z": "3152ace35cd2bc1a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$number(payload)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 120,
+        "wires": [
+            [
+                "c24a51ce0538c72c"
+            ]
+        ]
+    },
+    {
+        "id": "9eb9b07929ec3392",
+        "type": "change",
+        "z": "3152ace35cd2bc1a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$number(payload)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 360,
+        "y": 240,
+        "wires": [
+            [
+                "c24a51ce0538c72c"
+            ]
+        ]
+    },
+    {
+        "id": "6753c7cf292ab16b",
+        "type": "ui_chart",
+        "z": "3152ace35cd2bc1a",
+        "name": "",
+        "group": "7ed044a9.52f6cc",
+        "order": 0,
+        "width": "16",
+        "height": "15",
+        "label": "temp_chart",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "dd HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": true,
+        "ymin": "-10",
+        "ymax": "40",
+        "removeOlder": "1",
+        "removeOlderPoints": "",
+        "removeOlderUnit": "604800",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 730,
+        "y": 700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a77bd57c15f641b5",
+        "type": "function",
+        "z": "3152ace35cd2bc1a",
+        "name": "",
+        "func": "var My_series = [\"temp DegC\"];\nvar My_labels = [\"Data Values\"];\n\nmsg.payload = msg.payload.map(point => {return {x: point.time, y: point.temp}})\nmsg.payload = [{ series: My_series, data: [msg.payload], labels: My_labels}]\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 660,
+        "wires": [
+            [
+                "6753c7cf292ab16b"
+            ]
+        ]
+    },
+    {
+        "id": "06628cd9188f0f9b",
+        "type": "inject",
+        "z": "3152ace35cd2bc1a",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "500",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "1",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 90,
+        "y": 620,
+        "wires": [
+            [
+                "a7010e0f1a4dfa1b"
+            ]
+        ]
+    },
+    {
+        "id": "a7010e0f1a4dfa1b",
+        "type": "function",
+        "z": "3152ace35cd2bc1a",
+        "name": "",
+        "func": "msg.query = \"Select time,temp from bedroom\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 200,
+        "y": 720,
+        "wires": [
+            [
+                "14575b4afd7cb766"
+            ]
+        ]
+    },
+    {
+        "id": "ddb365097fd55b51",
+        "type": "debug",
+        "z": "3152ace35cd2bc1a",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 290,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "e989351bb8c657c3",
+        "type": "http request",
+        "z": "3152ace35cd2bc1a",
+        "name": "",
+        "method": "use",
+        "ret": "txt",
+        "paytoqs": "query",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "basic",
+        "senderr": false,
+        "x": 230,
+        "y": 400,
+        "wires": [
+            [
+                "ddb365097fd55b51"
+            ]
+        ]
+    },
+    {
+        "id": "fba92ba47a80e1a3",
+        "type": "inject",
+        "z": "3152ace35cd2bc1a",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 80,
+        "y": 340,
+        "wires": [
+            [
+                "fef62f6dbecceaba"
+            ]
+        ]
+    },
+    {
+        "id": "fef62f6dbecceaba",
+        "type": "change",
+        "z": "3152ace35cd2bc1a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "url",
+                "pt": "msg",
+                "to": "localhost:3000/",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "methood",
+                "pt": "msg",
+                "to": "GET",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 260,
+        "y": 340,
+        "wires": [
+            [
+                "e989351bb8c657c3"
+            ]
+        ]
+    },
+    {
+        "id": "f91e51cecf7d1910",
+        "type": "http in",
+        "z": "3152ace35cd2bc1a",
+        "name": "",
+        "url": "/test",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 120,
+        "y": 460,
+        "wires": [
+            [
+                "ddb365097fd55b51"
+            ]
+        ]
+    },
+    {
+        "id": "897b6eacd496e8ea",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "10.0.26.207",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "sessionExpiry": ""
+    },
+    {
+        "id": "9caa5eb5bbf553be",
+        "type": "influxdb",
+        "hostname": "10.0.26.207",
+        "port": "8086",
+        "protocol": "http",
+        "database": "mydb",
+        "name": "",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "http://localhost:8086",
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "7ed044a9.52f6cc",
+        "type": "ui_group",
+        "name": "Dashboard",
+        "tab": "fa485004.34ae",
+        "order": 1,
+        "disp": true,
+        "width": "16",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "fa485004.34ae",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]

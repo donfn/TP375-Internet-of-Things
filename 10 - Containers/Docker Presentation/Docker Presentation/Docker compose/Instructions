@@ -1,0 +1,24 @@
+## ////////////
+
+# docker pull nodered/node-red
+
+# docker run -it -p 1880:1880 -v node_red_data:/data --name mynodered nodered/node-red
+
+# URL: https://nodered.org/docs/getting-started/docker
+
+## ////////////
+
+
+
+
+/// DOCKER COMPOSE   
+
+docker-compose up -d     --> (for background running)
+
+docker-compose up        --> (for foreground running)
+
+docker-compose down        --> (for stoping running dockers)
+
+docker-compose down  --remove-orphans    --> (for stoping running dockers and clearing orphan containers)
+
+docker-compose ps

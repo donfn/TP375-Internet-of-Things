@@ -1,0 +1,173 @@
+// Installing on Ubuntu
+
+sudo apt install docker.io
+
+sudo apt install docker-compose
+
+
+// CHECK RUNNING DOCKERS
+
+docker ps       (preview only what runs)
+
+docker ps -a   (preview all)
+ 
+ 
+ 
+ 
+/// RUNNING
+
+docker run -it  hello-world
+
+docker run -dit --name hello-world  hello-world 
+
+docker run -it  --name hello-world hello-world
+
+docker run --rm -it  --name hello-world hello-world
+
+
+
+
+// KILL And Remove DOCKERS
+
+docker kill hello-world
+
+docker rm  hello-world
+ 
+ 
+ 
+
+// SEE LOGS
+
+docker logs <docker_name>
+docker logs hello-world
+
+
+
+
+// DOWNLOAD IMAGES
+
+docker pull <image_repo><image_name>
+docker pull nodered/node-red
+
+
+
+
+
+// Looking at downloaded images
+
+docker image ls
+
+
+
+
+
+// BUILD IMAGES
+
+docker build -t <name_lowercase>:<tag> <folder of Dockerfile>
+
+docker build -t my_image_docker:v1  .
+
+docker build -t my_image_docker:1.0.1  .
+
+docker build -t my_image_docker:latest  .
+ 
+ 
+ 
+ 
+// RUNNING OUR CUSTOM IMAGE
+
+docker run -it my_image_docker:v1
+
+
+
+
+// DOCKER REGISTRY LOGIN!
+
+docker login <...custom_url_or_default_official...>
+
+docker login
+
+
+
+
+// DOCKER TAG -- RETAG
+
+docker tag <...image_name...> <...target...image_name...>
+
+docker tag my_image_docker:v1 nikos445/my_test_repository:v1
+
+
+
+
+// DOCKER PUSH
+
+docker push <...image_name...>
+ 
+docker push nikos445/my_test_repository:v1
+
+
+
+
+
+
+// EXECUTE - _EXEC_ - TUTORIAL
+
+
+docker run -dit --name ubuntu ubuntu:latest
+
+docker exec -it ubuntu /bin/sh
+
+docker exec -it ubuntu /bin/bash 
+
+docker exec -it ubuntu sh 
+
+docker exec -it ubuntu bash 
+
+docker exec -it ubuntu ls 
+
+docker exec -it ubuntu mkdir NNNNIIIKOOOSS
+
+docker exec -it ubuntu ls -ls
+
+ 
+
+
+// CAREFULL DOCKERS ARE EPHEMERAL!
+// VOLUMES - STORAGE
+
+docker volume create my-vol
+
+docker volume ls
+
+docker volume rm my-vol
+
+
+
+
+
+// NETWORKS -- (HOST,BRIDGE,NONE)
+
+docker network create my-net
+
+docker network ls
+
+docker network create my-net --subnet=123.132.234.0/24 --driver=bridge
+
+docker network rm my-net
+
+
+
+// ALL AVAILABLE DOCKER COMMANDS:
+
+attach     container  events     image      kill       manifest   port       restart    search     stats      top        volume
+build      context    exec       images     load       network    ps         rm         secret     stop       trust      wait
+builder    cp         export     import     login      node       pull       rmi        service    swarm      unpause    
+commit     create     help       info       logout     pause      push       run        stack      system     update     
+config     diff       history    inspect    logs       plugin     rename     save       start      tag        version
+
+ 
+ 
+ 
+
+
+

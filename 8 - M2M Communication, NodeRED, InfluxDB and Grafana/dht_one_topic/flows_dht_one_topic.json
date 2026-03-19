@@ -1,0 +1,713 @@
+[
+    {
+        "id": "231ea117c693ab48",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "b8191b5c9a52b42d",
+        "type": "mqtt in",
+        "z": "231ea117c693ab48",
+        "name": "",
+        "topic": "esp32/temphum",
+        "qos": "1",
+        "datatype": "auto",
+        "broker": "6e51473f.1f47d8",
+        "inputs": 0,
+        "x": 120,
+        "y": 320,
+        "wires": [
+            [
+                "8cc0252191e84ed9"
+            ]
+        ]
+    },
+    {
+        "id": "25bd73cb5247924d",
+        "type": "mqtt out",
+        "z": "231ea117c693ab48",
+        "name": "",
+        "topic": "esp32/out",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "6e51473f.1f47d8",
+        "x": 320,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "67bf9f4db9da2e2b",
+        "type": "ui_switch",
+        "z": "231ea117c693ab48",
+        "name": "",
+        "label": "switch",
+        "tooltip": "",
+        "group": "606704340a429e0d",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "",
+        "topicType": "str",
+        "style": "",
+        "onvalue": "on",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "off",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": true,
+        "className": "",
+        "x": 110,
+        "y": 160,
+        "wires": [
+            [
+                "25bd73cb5247924d"
+            ]
+        ]
+    },
+    {
+        "id": "f26ed0621d77640f",
+        "type": "ui_slider",
+        "z": "231ea117c693ab48",
+        "name": "",
+        "label": "slider",
+        "tooltip": "",
+        "group": "606704340a429e0d",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "all",
+        "topic": "",
+        "topicType": "str",
+        "min": 0,
+        "max": "255",
+        "step": 1,
+        "className": "",
+        "x": 110,
+        "y": 220,
+        "wires": [
+            [
+                "ccbd3545a5286c75"
+            ]
+        ]
+    },
+    {
+        "id": "ccbd3545a5286c75",
+        "type": "mqtt out",
+        "z": "231ea117c693ab48",
+        "name": "",
+        "topic": "esp32/pwm",
+        "qos": "",
+        "retain": "",
+        "broker": "6e51473f.1f47d8",
+        "x": 330,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "5ff6c1a787dcc3d2",
+        "type": "ui_gauge",
+        "z": "231ea117c693ab48",
+        "name": "",
+        "group": "606704340a429e0d",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temperature",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "50",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 590,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "cd51d7eee5558de1",
+        "type": "ui_gauge",
+        "z": "231ea117c693ab48",
+        "name": "",
+        "group": "606704340a429e0d",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Humidity",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 600,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "99251429bbac7dfb",
+        "type": "aedes broker",
+        "z": "231ea117c693ab48",
+        "name": "",
+        "mqtt_port": 1883,
+        "mqtt_ws_port": "",
+        "cert": "",
+        "key": "",
+        "certname": "",
+        "keyname": "",
+        "dburl": "",
+        "usetls": false,
+        "x": 930,
+        "y": 280,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "8cc0252191e84ed9",
+        "type": "function",
+        "z": "231ea117c693ab48",
+        "name": "Function",
+        "func": "var message = msg.payload;\nvar tempString = message.indexOf(\"TEMP\") + 4;\nvar humString = message.indexOf(\"HUM\") + 3;\nvar temp = parseFloat(message.substring(tempString, message.indexOf(\"HUM\")));\nvar hum = parseFloat(message.substring(humString));\n\nreturn [ { payload: temp }, { payload: hum } ];",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 320,
+        "wires": [
+            [
+                "5ff6c1a787dcc3d2"
+            ],
+            [
+                "cd51d7eee5558de1"
+            ]
+        ]
+    },
+    {
+        "id": "b2a6c6c313121398",
+        "type": "function",
+        "z": "231ea117c693ab48",
+        "name": "Function 1",
+        "func": "if(msg.payload.includes(\"TEMP\"))\n{\n  var value=msg.payload.split(\"TEMP\")[1];\n  msg.payload=value.trim();\n  return msg;\n}",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 480,
+        "wires": [
+            [
+                "6913b90e38b8f504"
+            ]
+        ]
+    },
+    {
+        "id": "d111bd943c5ff909",
+        "type": "function",
+        "z": "231ea117c693ab48",
+        "name": "Function 2",
+        "func": "if(msg.payload.includes(\"HUM\"))\n{\n   var value=msg.payload.split(\"HUM\")[1];\n    msg.payload=value.trim();\n    return msg;\n}",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 580,
+        "wires": [
+            [
+                "bcfc91e1ae34d567"
+            ]
+        ]
+    },
+    {
+        "id": "6913b90e38b8f504",
+        "type": "ui_gauge",
+        "z": "231ea117c693ab48",
+        "name": "",
+        "group": "eef4cd624c907a67",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temperature",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "50",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 630,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "bcfc91e1ae34d567",
+        "type": "ui_gauge",
+        "z": "231ea117c693ab48",
+        "name": "",
+        "group": "eef4cd624c907a67",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Humidity",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 620,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "5c75045acfbdecd8",
+        "type": "mqtt in",
+        "z": "231ea117c693ab48",
+        "name": "",
+        "topic": "esp32/temphum",
+        "qos": "1",
+        "datatype": "auto",
+        "broker": "6e51473f.1f47d8",
+        "inputs": 0,
+        "x": 120,
+        "y": 540,
+        "wires": [
+            [
+                "b2a6c6c313121398",
+                "d111bd943c5ff909"
+            ]
+        ]
+    },
+    {
+        "id": "1fd65c6174dd3e25",
+        "type": "switch",
+        "z": "231ea117c693ab48",
+        "name": "Switch",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "cont",
+                "v": "TEMP",
+                "vt": "str"
+            },
+            {
+                "t": "cont",
+                "v": "HUM",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 330,
+        "y": 780,
+        "wires": [
+            [
+                "ecdab00bb0ec2525",
+                "d80f11c8d2234cf2"
+            ],
+            [
+                "9f72182b61ab539f",
+                "2a47a5889e58d732"
+            ]
+        ]
+    },
+    {
+        "id": "577fd1d0f7992e6e",
+        "type": "change",
+        "z": "231ea117c693ab48",
+        "name": "",
+        "rules": [
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "TEMP",
+                "fromt": "str",
+                "to": "",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 780,
+        "y": 840,
+        "wires": [
+            [
+                "73128c0359aae471",
+                "033b775276d156c2"
+            ]
+        ]
+    },
+    {
+        "id": "dfa4f78b3ee44b0d",
+        "type": "change",
+        "z": "231ea117c693ab48",
+        "name": "",
+        "rules": [
+            {
+                "t": "change",
+                "p": "payload",
+                "pt": "msg",
+                "from": "HUM",
+                "fromt": "str",
+                "to": "",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 660,
+        "y": 1020,
+        "wires": [
+            [
+                "d10d02868f8cb860",
+                "732e1e285f3b630c"
+            ]
+        ]
+    },
+    {
+        "id": "5ec4b2c1f1f48b7e",
+        "type": "mqtt in",
+        "z": "231ea117c693ab48",
+        "name": "",
+        "topic": "esp32/temphum",
+        "qos": "1",
+        "datatype": "auto",
+        "broker": "6e51473f.1f47d8",
+        "inputs": 0,
+        "x": 120,
+        "y": 760,
+        "wires": [
+            [
+                "1fd65c6174dd3e25"
+            ]
+        ]
+    },
+    {
+        "id": "73128c0359aae471",
+        "type": "ui_gauge",
+        "z": "231ea117c693ab48",
+        "name": "",
+        "group": "60176e8ec9e1dd22",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temperature",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "50",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1030,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "d10d02868f8cb860",
+        "type": "ui_gauge",
+        "z": "231ea117c693ab48",
+        "name": "",
+        "group": "60176e8ec9e1dd22",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Humidity",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 960,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "9f72182b61ab539f",
+        "type": "function",
+        "z": "231ea117c693ab48",
+        "name": "Function 2",
+        "func": "if(msg.payload.includes(\"HUM\"))\n{\n   var value=msg.payload.split(\"HUM\")[1];\n    msg.payload=value.trim();\n    return msg;\n}",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 920,
+        "wires": [
+            [
+                "dfa4f78b3ee44b0d"
+            ]
+        ]
+    },
+    {
+        "id": "c014226723fcaca9",
+        "type": "inject",
+        "z": "231ea117c693ab48",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "TEMP10HUM40",
+        "payloadType": "str",
+        "x": 120,
+        "y": 860,
+        "wires": [
+            [
+                "1fd65c6174dd3e25"
+            ]
+        ]
+    },
+    {
+        "id": "ecdab00bb0ec2525",
+        "type": "function",
+        "z": "231ea117c693ab48",
+        "name": "Function 3",
+        "func": "if(msg.payload.includes(\"TEMP\"))\n{\n    if (msg.payload.includes(\"HUM\")){\n   var value=msg.payload.split(\"HUM\")[0];\n    msg.payload=value.trim();\n    return msg;\n    }\n    else {\n        var value = msg.payload.split(\"TEMP\")[1];\n        msg.payload = value.trim();\n        return msg;\n    }\n\n}",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 780,
+        "wires": [
+            [
+                "577fd1d0f7992e6e"
+            ]
+        ]
+    },
+    {
+        "id": "033b775276d156c2",
+        "type": "debug",
+        "z": "231ea117c693ab48",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 980,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "732e1e285f3b630c",
+        "type": "debug",
+        "z": "231ea117c693ab48",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 880,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "d80f11c8d2234cf2",
+        "type": "debug",
+        "z": "231ea117c693ab48",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "2a47a5889e58d732",
+        "type": "debug",
+        "z": "231ea117c693ab48",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 500,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "6e51473f.1f47d8",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "127.0.0.1",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "606704340a429e0d",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "79538b4b7cb6ead7",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "eef4cd624c907a67",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "4ec7850394a3e0f9",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "60176e8ec9e1dd22",
+        "type": "ui_group",
+        "name": "Default",
+        "tab": "0692455ed0a1d843",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "79538b4b7cb6ead7",
+        "type": "ui_tab",
+        "name": "Tab 1",
+        "icon": "dashboard",
+        "order": 1
+    },
+    {
+        "id": "4ec7850394a3e0f9",
+        "type": "ui_tab",
+        "name": "Tab 2",
+        "icon": "dashboard",
+        "order": 2
+    },
+    {
+        "id": "0692455ed0a1d843",
+        "type": "ui_tab",
+        "name": "Tab 3",
+        "icon": "dashboard",
+        "order": 3
+    }
+]

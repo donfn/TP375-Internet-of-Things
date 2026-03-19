@@ -1,0 +1,38 @@
+## DOCKER COMPOSE EXAMPLE WITH VOLUMES NETWORKS AND EXPOSED PORTS
+
+
+version: "3"
+
+services:
+
+  # NODERED SERVICE
+
+  node-red:
+    image: nodered/node-red:latest
+    environment:
+      - TZ=Europe/Athens
+      - NODE_RED_CREDENTIAL_SECRET=nikos1234
+      - EMAIL=nikos@gmail.com
+    ports:
+      - "1880:1880"     # HOST_PORT: CONTAINER_PORT
+    networks:
+      - node-red-net 
+    volumes:
+      - node-red-data:/data
+
+ 
+# UBUNTU SERVICE
+
+  # ubuntu:
+  #   image: influx:latest
+  #   environment:
+  #     - MY_ENVIRONMENT_VARIABLE=NIKOS 
+  #   command:
+  #     - "sleep"
+  #     - "1000"
+
+volumes:        # DISKOS - STORAGE - RITHMISIS
+  node-red-data: 
+
+networks:       # DIKTIO RITHMISIS
+  node-red-net:
